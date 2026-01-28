@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # Nom d'image toujours en minuscules pour GHCR
-  IMAGE_NAME: ${{ github.repository | toLower }}
+  # On part du nom du dépôt, on le mettra en minuscules dans les scripts shell
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   backend-build:
@@ -35,8 +35,10 @@ jobs:
       - name: Build Docker image
         working-directory: ./backend
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ github.sha }} .
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:latest .
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
+          docker build -t "${IMAGE_BASE}-backend:${{ github.sha }}" .
+          docker build -t "${IMAGE_BASE}-backend:latest" .
       
       - name: Log in to Container Registry
         uses: docker/login-action@v3
@@ -47,8 +49,10 @@ jobs:
       
       - name: Push Docker image
         run: |
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ github.sha }}
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:latest
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
+          docker push "${IMAGE_BASE}-backend:${{ github.sha }}"
+          docker push "${IMAGE_BASE}-backend:latest"
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -73,8 +77,10 @@ jobs:
       - name: Build Docker image
         working-directory: ./frontend
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ github.sha }} .
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:latest .
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
+          docker build -t "${IMAGE_BASE}-frontend:${{ github.sha }}" .
+          docker build -t "${IMAGE_BASE}-frontend:latest" .
       
       - name: Log in to Container Registry
         uses: docker/login-action@v3
@@ -85,8 +91,10 @@ jobs:
       
       - name: Push Docker image
         run: |
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ github.sha }}
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:latest
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
+          docker push "${IMAGE_BASE}-frontend:${{ github.sha }}"
+          docker push "${IMAGE_BASE}-frontend:latest"
 
   deploy:
     needs: [backend-build, frontend-build]
@@ -111,8 +119,10 @@ jobs:
       
       - name: Update Kubernetes deployments
         run: |
-          sed -i "s|your-registry|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}|g" k8s/backend-deployment.yaml
-          sed -i "s|your-registry|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}|g" k8s/frontend-deployment.yaml
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
+          sed -i "s|your-registry|${IMAGE_BASE}|g" k8s/backend-deployment.yaml
+          sed -i "s|your-registry|${IMAGE_BASE}|g" k8s/frontend-deployment.yaml
           sed -i "s|:latest|:${{ github.sha }}|g" k8s/backend-deployment.yaml
           sed -i "s|:latest|:${{ github.sha }}|g" k8s/frontend-deployment.yaml
           kubectl apply -f k8s/
