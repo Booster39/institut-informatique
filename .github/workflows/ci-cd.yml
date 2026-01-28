@@ -8,7 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # Nom d'image toujours en minuscules pour GHCR
+  IMAGE_NAME: ${{ github.repository | toLower }}
 
 jobs:
   backend-build:
