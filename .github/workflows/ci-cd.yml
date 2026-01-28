@@ -39,20 +39,6 @@ jobs:
           IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
           docker build -t "${IMAGE_BASE}-backend:${{ github.sha }}" .
           docker build -t "${IMAGE_BASE}-backend:latest" .
-      
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Push Docker image
-        run: |
-          REPO_LC="${GITHUB_REPOSITORY,,}"
-          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
-          docker push "${IMAGE_BASE}-backend:${{ github.sha }}"
-          docker push "${IMAGE_BASE}-backend:latest"
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -81,53 +67,3 @@ jobs:
           IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
           docker build -t "${IMAGE_BASE}-frontend:${{ github.sha }}" .
           docker build -t "${IMAGE_BASE}-frontend:latest" .
-      
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Push Docker image
-        run: |
-          REPO_LC="${GITHUB_REPOSITORY,,}"
-          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
-          docker push "${IMAGE_BASE}-frontend:${{ github.sha }}"
-          docker push "${IMAGE_BASE}-frontend:latest"
-
-  deploy:
-    needs: [backend-build, frontend-build]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-      
-      - name: Configure kubectl for EKS
-        run: |
-          aws eks update-kubeconfig --name institut-cluster --region us-east-1
-      
-      - name: Update Kubernetes deployments
-        run: |
-          REPO_LC="${GITHUB_REPOSITORY,,}"
-          IMAGE_BASE="${{ env.REGISTRY }}/${REPO_LC}"
-          sed -i "s|your-registry|${IMAGE_BASE}|g" k8s/backend-deployment.yaml
-          sed -i "s|your-registry|${IMAGE_BASE}|g" k8s/frontend-deployment.yaml
-          sed -i "s|:latest|:${{ github.sha }}|g" k8s/backend-deployment.yaml
-          sed -i "s|:latest|:${{ github.sha }}|g" k8s/frontend-deployment.yaml
-          kubectl apply -f k8s/
-      
-      - name: Wait for rollout
-        run: |
-          kubectl rollout status deployment/backend -n institut
-          kubectl rollout status deployment/frontend -n institut
