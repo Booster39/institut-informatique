@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: institut-backend
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/institut_db}
+    username: ${SPRING_DATASOURCE_USERNAME:institut_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:institut_password}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  sql:
+    init:
+      mode: embedded
+      data-locations: classpath:data.sql,classpath:lessons_exercises_data.sql,classpath:complete_course_content.sql,classpath:generate_full_content.sql,classpath:all_courses_complete_content.sql,classpath:courses_6_to_11_content.sql,classpath:missing_content_completion.sql
+      continue-on-error: true
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:institut-secret-key-change-in-production}
+  expiration: 86400000
+
+logging:
+  level:
+    com.institut: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
