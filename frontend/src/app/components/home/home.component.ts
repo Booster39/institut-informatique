@@ -3,6 +3,12 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LanguageService } from '../../services/language.service';
 
+const HERO_TITLE = {
+  fr: 'Développeur en 9 modules : Réalise ton site et ton application',
+  en: 'Developer in 9 modules: Build your site and your app',
+  ar: 'مطوّر في 9 وحدات: أنشئ موقعك وتطبيقك'
+} as const;
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -104,12 +110,7 @@ export class HomeComponent implements OnInit {
 
   getTitle(): string {
     const lang = this.languageService.getCurrentLanguage();
-    const titles: Record<string, string> = {
-      fr: 'Développeur en 9 modules : Réalise ton site et ton application',
-      en: 'Developer in 9 modules: Build your site and your app',
-      ar: 'مطوّر في 9 وحدات: أنشئ موقعك وتطبيقك'
-    };
-    return titles[lang] ?? titles['fr'];
+    return HERO_TITLE[lang] ?? HERO_TITLE.fr;
   }
 
   getSubtitle(): string {
