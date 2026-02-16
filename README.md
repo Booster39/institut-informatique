@@ -1,6 +1,6 @@
 # L'Institut de l'informatique - مركز الحاسوبي
 
-Plateforme d'apprentissage complète pour devenir développeur full stack en 1 an.
+Plateforme d'apprentissage en 9 modules : réalise ton site et ton application.
 
 ## 🎯 Objectif
 
@@ -110,7 +110,7 @@ MIT
 
 ## 🎓 Contenu Pédagogique
 
-La plateforme propose un parcours complet sur 1 an avec:
+La plateforme propose un parcours en 9 modules avec:
 
 1. **Fondamentaux** - Bases de la programmation
 2. **Java & Spring Boot** - Backend robuste

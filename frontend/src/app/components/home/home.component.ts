@@ -104,12 +104,12 @@ export class HomeComponent implements OnInit {
 
   getTitle(): string {
     const lang = this.languageService.getCurrentLanguage();
-    const titles = {
-      fr: 'Devenez Développeur Full Stack en 1 An',
-      en: 'Become a Full Stack Developer in 1 Year',
-      ar: 'كن مطورًا كاملاً في عام واحد'
+    const titles: Record<string, string> = {
+      fr: 'Développeur en 9 modules : Réalise ton site et ton application',
+      en: 'Developer in 9 modules: Build your site and your app',
+      ar: 'مطوّر في 9 وحدات: أنشئ موقعك وتطبيقك'
     };
-    return titles[lang];
+    return titles[lang] ?? titles['fr'];
   }
 
   getSubtitle(): string {
@@ -146,19 +146,19 @@ export class HomeComponent implements OnInit {
     const lang = this.languageService.getCurrentLanguage();
     const features = {
       fr: [
-        { icon: '📚', title: 'Cours Complets', description: 'Parcours structuré sur 1 an' },
+        { icon: '📚', title: 'Cours Complets', description: 'Parcours structuré en 9 modules' },
         { icon: '💻', title: 'Pratique', description: 'Exercices et projets réels' },
         { icon: '🌍', title: 'Multilingue', description: 'Français, Anglais, Arabe' },
         { icon: '✅', title: 'QCM & Corrigés', description: 'Évaluation continue' }
       ],
       en: [
-        { icon: '📚', title: 'Complete Courses', description: 'Structured 1-year program' },
+        { icon: '📚', title: 'Complete Courses', description: 'Structured 9-module program' },
         { icon: '💻', title: 'Hands-on', description: 'Real exercises and projects' },
         { icon: '🌍', title: 'Multilingual', description: 'French, English, Arabic' },
         { icon: '✅', title: 'Quizzes & Solutions', description: 'Continuous assessment' }
       ],
       ar: [
-        { icon: '📚', title: 'دورات كاملة', description: 'برنامج منظم لمدة عام' },
+        { icon: '📚', title: 'دورات كاملة', description: 'برنامج منظم في 9 وحدات' },
         { icon: '💻', title: 'عملي', description: 'تمارين ومشاريع حقيقية' },
         { icon: '🌍', title: 'متعدد اللغات', description: 'الفرنسية والإنجليزية والعربية' },
         { icon: '✅', title: 'اختبارات وحلول', description: 'تقييم مستمر' }

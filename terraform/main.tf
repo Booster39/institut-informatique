@@ -222,33 +222,153 @@ resource "aws_instance" "app_server" {
 
   user_data = base64encode(<<EOF
 #!/bin/bash
+exec > >(tee /var/log/user-data.log) 2>&1
+
+echo "=== Démarrage user_data $(date) ==="
 
 yum update -y
 amazon-linux-extras install docker -y
 systemctl enable docker
 systemctl start docker
+echo "Docker installé et démarré."
 
-# Installer docker-compose (v2 standalone)
 curl -L "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+echo "Docker Compose installé."
 
 yum install -y git
 
 cd /opt
-
-# Cloner le dépôt de l'application (à ajuster avec ton URL Git)
-if [ ! -d "institut-app" ]; then
-  git clone https://github.com/TON_USER/TON_REPO.git institut-app
+if [ -d "institut-informatique" ]; then
+  cd institut-informatique && git pull && cd /opt
+else
+  git clone https://github.com/Booster39/institut-informatique.git institut-informatique || { echo "ERREUR git clone"; exit 1; }
 fi
 
-cd institut-app
+cd /opt/institut-informatique
+echo "Répertoire: $(pwd), contenu: $(ls -la)"
 
-# Copier le .env de base si nécessaire (tu pourras l'éditer ensuite dans Git)
-if [ ! -f ".env" ] && [ -f ".env.example" ]; then
+if [ -f ".env.example" ] && [ ! -f ".env" ]; then
   cp .env.example .env
 fi
 
+echo "Lancement docker-compose..."
 docker-compose up -d --build
+echo "=== Fin user_data $(date) ==="
 EOF
   )
+}
+
+#
+# Application Load Balancer (HTTPS en production)
+#
+
+resource "aws_security_group" "alb" {
+  name_prefix = "institut-alb-"
+  vpc_id      = aws_vpc.main.id
+  description = "ALB pour frontend (HTTP/HTTPS)"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = { Name = "institut-alb-sg" }
+}
+
+resource "aws_lb" "main" {
+  name               = "institut-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = aws_subnet.public[*].id
+
+  tags = { Name = "institut-alb" }
+}
+
+resource "aws_lb_target_group" "app" {
+  name     = "institut-app-tg"
+  port     = 4200
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 30
+  }
+
+  tags = { Name = "institut-app-tg" }
+}
+
+resource "aws_lb_target_group_attachment" "app" {
+  target_group_arn = aws_lb_target_group.app.arn
+  target_id        = aws_instance.app_server.id
+  port             = 4200
+}
+
+# HTTP : redirection vers HTTPS si certificat fourni, sinon forward vers l'app
+resource "aws_lb_listener" "http_redirect" {
+  count = var.acm_certificate_arn != "" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "http_forward" {
+  count = var.acm_certificate_arn == "" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+}
+
+# HTTPS (uniquement si certificat ACM fourni)
+resource "aws_lb_listener" "https" {
+  count = var.acm_certificate_arn != "" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.acm_certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
 }

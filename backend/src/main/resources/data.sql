@@ -27,9 +27,9 @@ VALUES
   'Fondamentaux du développement',
   'Fundamentals of Software Development',
   'أساسيات تطوير البرمجيات',
-  'Posez des bases solides pour devenir développeur full stack en 1 an : logique, algorithmes simples, pensée structurée, bonnes pratiques, Git/GitHub et organisation de votre apprentissage. À la fin de ce cours, vous saurez lire, comprendre et écrire des programmes simples en suivant une démarche pas à pas.',
-  'Build strong foundations to become a full stack developer in 1 year: logic, simple algorithms, structured thinking, best practices, Git/GitHub and learning organization. By the end of this course, you will be able to read, understand and write simple programs step by step.',
-  'ضع أساسًا قويًا لتصبح مطورًا كاملاً خلال سنة واحدة: المنطق، الخوارزميات البسيطة، طريقة التفكير المنظمة، أفضل الممارسات، Git/GitHub وتنظيم مسار تعلّمك. في نهاية هذا الكورس ستكون قادرًا على قراءة وكتابة برامج بسيطة خطوة بخطوة.',
+  'Posez des bases solides pour devenir développeur en 9 modules et réaliser ton site et ton application : logique, algorithmes simples, pensée structurée, bonnes pratiques, Git/GitHub et organisation de votre apprentissage. À la fin de ce cours, vous saurez lire, comprendre et écrire des programmes simples en suivant une démarche pas à pas.',
+  'Build strong foundations to become a developer in 9 modules and build your site and your app: logic, simple algorithms, structured thinking, best practices, Git/GitHub and learning organization. By the end of this course, you will be able to read, understand and write simple programs step by step.',
+  'ضع أساسًا قويًا لتصبح مطورًا في 9 وحدات وتنشئ موقعك وتطبيقك: المنطق، الخوارزميات البسيطة، طريقة التفكير المنظمة، أفضل الممارسات، Git/GitHub وتنظيم مسار تعلّمك. في نهاية هذا الكورس ستكون قادرًا على قراءة وكتابة برامج بسيطة خطوة بخطوة.',
   'BEGINNER', 1, NOW(), NOW()
 ),
 

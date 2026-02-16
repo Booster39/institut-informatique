@@ -2,7 +2,7 @@
 
 ## 🎯 Objectif du Projet
 
-Créer une plateforme d'apprentissage complète pour devenir développeur full stack en 1 an, avec support multilingue (Français, Anglais, Arabe).
+Créer une plateforme d'apprentissage en 9 modules pour réaliser son site et son application, avec support multilingue (Français, Anglais, Arabe).
 
 ## 🏗️ Architecture
 

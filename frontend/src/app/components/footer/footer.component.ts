@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <footer class="footer">
       <div class="container">
         <p>&copy; 2026 L'Institut de l'informatique - مركز الحاسوبي. Tous droits réservés.</p>
-        <p>Devenez développeur full stack en 1 an</p>
+        <p>Développeur en 9 modules : Réalise ton site et ton application</p>
       </div>
     </footer>
   `,

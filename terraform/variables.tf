@@ -15,3 +15,11 @@ variable "environment" {
   type        = string
   default     = "production"
 }
+
+# HTTPS : certificat ACM (créé dans la console AWS ou via Route 53)
+# Sans certificat, l'ALB ne sert que du HTTP.
+variable "acm_certificate_arn" {
+  description = "ARN du certificat ACM pour HTTPS sur l'ALB (optionnel)"
+  type        = string
+  default     = ""
+}
