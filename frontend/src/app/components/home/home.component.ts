@@ -352,9 +352,9 @@ export class HomeComponent implements OnInit {
 
   getInstituteDescription(): string {
     const s = {
-      fr: "Un parcours structuré en 9 modules pour passer des fondations à l'architecture logicielle. De Java à Spring Boot, Angular, les bases de données, la sécurité JWT et le CI/CD — une formation complète pour devenir développeur full stack.",
-      en: "A structured 9-module program from foundations to software architecture. From Java to Spring Boot, Angular, databases, JWT security and CI/CD — complete training to become a full stack developer.",
-      ar: 'برنامج منظم في 9 وحدات من الأساسيات إلى هندسة البرمجيات. من Java إلى Spring Boot و Angular وقواعد البيانات وأمان JWT و CI/CD — تدريب شامل لتصبح مطور full stack.'
+      fr: "Un parcours structuré en 7 modules pour passer des fondations à l'architecture logicielle. Du Python à Flask, les bases de données, la sécurité JWT et le CI/CD — une formation complète pour devenir développeur web.",
+      en: "A structured 7-module program from foundations to software architecture. From Python to Flask, databases, JWT security and CI/CD — complete training to become a web developer.",
+      ar: 'برنامج منظم في 7 وحدات من الأساسيات إلى هندسة البرمجيات. من Python إلى Flask وقواعد البيانات وأمان JWT و CI/CD — تدريب شامل لتصبح مطور web.'
     };
     return s[this.lang()] ?? s.fr;
   }
@@ -371,15 +371,13 @@ export class HomeComponent implements OnInit {
 
   getModules(): { num: string; title: string }[] {
     const modules = [
-      { num: '1', title: 'Fondations' },
-      { num: '2', title: 'Java : des bases à la pratique' },
-      { num: '3', title: 'Bases de données & SQL' },
-      { num: '4', title: 'Spring Boot : construire une API REST' },
-      { num: '5', title: 'Angular : application front-end moderne' },
-      { num: '6', title: 'Spring Security + JWT' },
-      { num: '7', title: 'Tests unitaires & intégration' },
-      { num: '8', title: 'CI/CD & DevOps de base' },
-      { num: '9', title: 'Architecture logicielle & bonnes pratiques' }
+      { num: '1', title: 'Application Flask basique : routes, templates, DB' },
+      { num: '2', title: 'Application Flask pro : sessions, sécurité, tests' },
+      { num: '3', title: 'Base de données avancées : SQLAlchemy, migrations, optimisation' },
+      { num: '4', title: 'API REST et services web : JSON, authentification API, documentation' },
+      { num: '5', title: 'Interface utilisateur moderne et frameworks frontend' },
+      { num: '6', title: 'Déploiement et production : Docker, cloud, CI/CD' },
+      { num: '7', title: 'Projet complet et optimisation : architecture, performance, bonnes pratiques' }
     ];
     return modules;
   }
@@ -452,9 +450,9 @@ export class HomeComponent implements OnInit {
 
   getCreatorDescription(): string {
     const s = {
-      fr: 'Un développeur full stack basé à Lyon, passé par l\'algorithmique, la data science et le web. Il conçoit des applications cartographiques, des tableaux de bord analytiques et cette plateforme d\'apprentissage pour partager son parcours. Convaincu qu\'on apprend en faisant et en transmettant.',
-      en: 'A full stack developer based in Lyon, from algorithms and data science to the web. He builds mapping applications, analytics dashboards and this learning platform to share his journey. Believing that we learn by doing and by teaching.',
-      ar: 'مطوّر full stack مقيم في ليون، من الخوارزميات وعلوم البيانات إلى الويب. يبني تطبيقات خرائط ولوحات تحليلات وهذه المنصة التعليمية لمشاركة مساره. مقتنع بأننا نتعلم بالممارسة والنقل.'
+      fr: 'Un développeur full stack basé en France, passé par l\'algorithmique, la data science et le web. Il conçoit des applications cartographiques, des tableaux de bord analytiques et cette plateforme d\'apprentissage pour partager son parcours. Convaincu qu\'on apprend en faisant et en transmettant.',
+      en: 'A full stack developer based in France, from algorithms and data science to the web. He builds mapping applications, analytics dashboards and this learning platform to share his journey. Believing that we learn by doing and by teaching.',
+      ar: 'مطوّر full stack مقيم في فرنسا، من الخوارزميات وعلوم البيانات إلى الويب. يبني تطبيقات خرائط ولوحات تحليلات وهذه المنصة التعليمية لمشاركة مساره. مقتنع بأننا نتعلم بالممارسة والنقل.'
     };
     return s[this.lang()] ?? s.fr;
   }
