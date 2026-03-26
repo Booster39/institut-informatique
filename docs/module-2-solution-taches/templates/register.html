@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2 class="card__title">Creer un compte</h2>
+
+    {% if error %}
+      <div class="message message--danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('register') }}" class="form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+      <div class="form__group">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" maxlength="30" required />
+      </div>
+
+      <div class="form__group">
+        <label for="password">Mot de passe</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+
+      <div class="row">
+        <button class="btn btn--primary" type="submit">Creer</button>
+        <a class="btn" href="{{ url_for('login') }}">J'ai un compte</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}
+

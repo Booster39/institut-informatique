@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Introuvable{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2 class="card__title">404 - Introuvable</h2>
+    <p>La page demandee n'existe pas.</p>
+    <a class="btn btn--primary" href="{{ url_for('index') }}">Retour</a>
+  </section>
+{% endblock %}
+

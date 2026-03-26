@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter une tache{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2 class="card__title">Ajouter une tache</h2>
+
+    {% if error %}
+      <div class="message message--danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('add') }}" class="form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+      <div class="form__group">
+        <label for="titre">Titre</label>
+        <input id="titre" name="titre" type="text" maxlength="60" required />
+      </div>
+
+      <div class="form__group">
+        <label for="echeance">Echeance (optionnel)</label>
+        <input id="echeance" name="echeance" type="date" />
+      </div>
+
+      <div class="row">
+        <button class="btn btn--primary" type="submit">Ajouter</button>
+        <a class="btn" href="{{ url_for('index') }}">Annuler</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}
+

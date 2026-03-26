@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Mes taches{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <h2 class="card__title">Mes taches</h2>
+
+    <div class="filters">
+      <form method="GET" action="{{ url_for('index') }}" class="filters__form">
+        <label for="done">Filtre</label>
+        <select id="done" name="done" onchange="this.form.submit()">
+          <option value="all" {% if done_param == 'all' %}selected{% endif %}>Toutes</option>
+          <option value="true" {% if done_param in ['true','done','terminee'] %}selected{% endif %}>Terminees</option>
+          <option value="false" {% if done_param in ['false','en_cours','encours'] %}selected{% endif %}>En cours</option>
+        </select>
+      </form>
+
+      <button class="btn" type="button" onclick="refreshTasks()">Rafraichir (API GET)</button>
+      <span id="loading" class="loading" aria-live="polite"></span>
+    </div>
+
+    <div id="tasksList" class="tasks">
+      {% if tasks|length == 0 %}
+        <p>Aucune tache.</p>
+      {% else %}
+        {% for t in tasks %}
+          <div class="task {% if t.terminee %}task--done{% endif %}">
+            <div class="task__top">
+              <div class="task__title">
+                {{ t.titre }}
+              </div>
+              <div class="task__status">
+                {% if t.terminee %}Terminee{% else %}En cours{% endif %}
+              </div>
+            </div>
+
+            {% if t.echeance %}
+              <div class="task__meta">Echeance : {{ t.echeance }}</div>
+            {% endif %}
+
+            <div class="task__actions">
+              <form method="POST" action="{{ url_for('toggle', task_id=t.id) }}">
+                <button class="btn" type="submit">
+                  {% if t.terminee %}Marquer en cours{% else %}Marquer terminee{% endif %}
+                </button>
+              </form>
+
+              <a class="btn" href="{{ url_for('edit', task_id=t.id) }}">Editer</a>
+
+              <form method="POST" action="{{ url_for('delete', task_id=t.id) }}">
+                <button class="btn btn--danger" type="submit">Supprimer</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <a class="btn btn--primary" href="{{ url_for('add') }}">Ajouter une tache</a>
+    </div>
+  </section>
+
+  <script>
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function currentDoneFilter() {
+      const sel = document.getElementById("done");
+      if (!sel) return "all";
+      return sel.value;
+    }
+
+    async function refreshTasks() {
+      const loading = document.getElementById("loading");
+      const status = loading;
+      status.textContent = "chargement...";
+
+      const doneValue = currentDoneFilter();
+      const url = doneValue === "all" ? "/api/tasks" : `/api/tasks?done=${encodeURIComponent(doneValue)}`;
+
+      try {
+        const res = await fetch(url);
+        const tasks = await res.json();
+
+        const container = document.getElementById("tasksList");
+        container.innerHTML = "";
+
+        if (!tasks || tasks.length === 0) {
+          container.innerHTML = "<p>Aucune tache.</p>";
+          return;
+        }
+
+        tasks.forEach(t => {
+          const terminee = !!t.terminee;
+          const html = `
+            <div class="task ${terminee ? "task--done" : ""}">
+              <div class="task__top">
+                <div class="task__title">${escapeHtml(t.titre)}</div>
+                <div class="task__status">${terminee ? "Terminee" : "En cours"}</div>
+              </div>
+              ${t.echeance ? `<div class="task__meta">Echeance : ${escapeHtml(t.echeance)}</div>` : ""}
+              <div class="task__actions">
+                <form method="POST" action="/toggle/${t.id}">
+                  <button class="btn" type="submit">${terminee ? "Marquer en cours" : "Marquer terminee"}</button>
+                </form>
+                <a class="btn" href="/edit/${t.id}">Editer</a>
+                <form method="POST" action="/delete/${t.id}">
+                  <button class="btn btn--danger" type="submit">Supprimer</button>
+                </form>
+              </div>
+            </div>
+          `;
+          container.insertAdjacentHTML("beforeend", html);
+        });
+      } catch (e) {
+        status.textContent = "Erreur lors du rafraichissement.";
+      } finally {
+        if (status.textContent === "chargement...") status.textContent = "";
+        else setTimeout(() => { if (status.textContent.startsWith("Erreur")) return; status.textContent = ""; }, 1200);
+      }
+    }
+  </script>
+{% endblock %}
+
