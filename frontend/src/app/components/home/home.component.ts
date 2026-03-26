@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { LanguageService, Language } from '../../services/language.service';
 
 const HERO_TITLE = {
-  fr: 'Développeur en 9 modules : Réalise ton site et ton application',
-  en: 'Developer in 9 modules: Build your site and your app',
-  ar: 'مطوّر في 9 وحدات: أنشئ موقعك وتطبيقك'
+  fr: 'Développeur en 1 an : Réalise tes sites et tes applications',
+  en: 'Developer in 1 year: Build your sites and your apps',
+  ar: 'مطوّر في 1 سنة: أنشئ مواقعك وتطبيقاتك'
 } as const;
 
 @Component({
