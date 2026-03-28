@@ -37,7 +37,7 @@ const HERO_TITLE = {
               <p class="institute-text">{{ getInstituteDescription() }}</p>
             </div>
             <div class="institute-image-box">
-              <img src="assets/affiches-livres.png" alt="Affiches livres" class="institute-image" />
+              <img src="assets/institut-logo.png" alt="Logo Institut de l'informatique" class="institute-image" />
             </div>
           </div>
         </div>
