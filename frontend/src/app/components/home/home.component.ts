@@ -262,9 +262,29 @@ const HERO_TITLE = {
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      border-left: 4px solid #0f3460;
       transition: transform 0.2s;
     }
+    .module-card:nth-child(1) {
+  border-left: 4px solid #c7385a;
+}
+    .module-card:nth-child(2) {
+  border-left: 4px solid #fe8537;
+}
+    .module-card:nth-child(3) {
+  border-left: 4px solid #8a5a09;
+}
+    .module-card:nth-child(4) {
+  border-left: 4px solid #08b4fe;
+}
+    .module-card:nth-child(5) {
+  border-left: 4px solid #b03ffe;
+}
+    .module-card:nth-child(6) {
+  border-left: 4px solid #6df966;
+}
+    .module-card:nth-child(7) {
+  border-left: 4px solid #ff0000;
+}
     .module-card:hover { transform: translateY(-2px); }
     .module-num {
       display: inline-block;
@@ -426,8 +446,8 @@ export class HomeComponent implements OnInit {
     const lang = this.lang();
     const items = {
       fr: [
-        { icon: '📄', text: 'PDF fournis gratuitement' },
-        { icon: '👤', text: 'Cours privé, élève seul' },
+        { icon: '📄', text: 'PDF fournis' },
+        { icon: '👤', text: 'Cours individuels' },
         { icon: '📚', text: 'Pédagogie claire' },
         { icon: '✏️', text: 'Exercices pratiques' },
         { icon: '🎓', text: 'Formateur diplômé Master' },
@@ -435,8 +455,8 @@ export class HomeComponent implements OnInit {
         { icon: '⏰', text: 'Horaires flexibles' }
       ],
       en: [
-        { icon: '📄', text: 'Free PDF materials' },
-        { icon: '👤', text: 'Private lessons, one-on-one' },
+        { icon: '📄', text: 'PDF materials' },
+        { icon: '👤', text: 'Private lessons' },
         { icon: '📚', text: 'Clear pedagogy' },
         { icon: '✏️', text: 'Practical exercises' },
         { icon: '🎓', text: 'Master-degree instructor' },
@@ -444,7 +464,7 @@ export class HomeComponent implements OnInit {
         { icon: '⏰', text: 'Flexible schedule' }
       ],
       ar: [
-        { icon: '📄', text: 'ملفات PDF مجانية' },
+        { icon: '📄', text: 'ملفات PDF' },
         { icon: '👤', text: 'دروس خاصة، طالب واحد' },
         { icon: '📚', text: 'منهجية واضحة' },
         { icon: '✏️', text: 'تمارين عملية' },
