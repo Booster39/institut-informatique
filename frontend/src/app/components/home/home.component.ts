@@ -32,7 +32,14 @@ const HERO_TITLE = {
       <section class="institute" id="institut">
         <div class="container">
           <h2>{{ getInstituteTitle() }}</h2>
-          <p class="institute-text">{{ getInstituteDescription() }}</p>
+          <div class="institute-content">
+            <div class="institute-text-box">
+              <p class="institute-text">{{ getInstituteDescription() }}</p>
+            </div>
+            <div class="institute-image-box">
+              <img src="assets/affiches-livres.png" alt="Affiches livres" class="institute-image" />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -199,15 +206,43 @@ const HERO_TITLE = {
     .institute h2, .modules h2, .benefits h2, .formules h2, .creator h2 {
       text-align: center;
       font-size: 2rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       color: #1a1a2e;
     }
+    .institute-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .institute-text-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
     .institute-text {
-      max-width: 700px;
-      margin: 0 auto;
       font-size: 1.1rem;
       line-height: 1.8;
       color: #475569;
+      margin: 0;
+    }
+    .institute-image-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .institute-image {
+      max-width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    @media (max-width: 768px) {
+      .institute-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
     }
 
     .modules { padding: 4rem 0; }
@@ -450,9 +485,9 @@ export class HomeComponent implements OnInit {
 
   getCreatorDescription(): string {
     const s = {
-      fr: 'Un développeur full stack basé en France, passé par l\'algorithmique, la data science et le web. Il conçoit des applications cartographiques, des tableaux de bord analytiques et cette plateforme d\'apprentissage pour partager son parcours. Convaincu qu\'on apprend en faisant et en transmettant.',
-      en: 'A full stack developer based in France, from algorithms and data science to the web. He builds mapping applications, analytics dashboards and this learning platform to share his journey. Believing that we learn by doing and by teaching.',
-      ar: 'مطوّر full stack مقيم في فرنسا، من الخوارزميات وعلوم البيانات إلى الويب. يبني تطبيقات خرائط ولوحات تحليلات وهذه المنصة التعليمية لمشاركة مساره. مقتنع بأننا نتعلم بالممارسة والنقل.'
+      fr: 'Un développeur full stack de Paris passé par Epitech et diplomé d\'Openclassrooms. Il a étudié l\'algorithmique, la data science et le web. Il conçoit des applications cartographiques, des tableaux de bord analytiques et cette plateforme d\'apprentissage pour partager son parcours. Convaincu qu\'on apprend en faisant et en transmettant, il enseigne avec pédagogie et clarté.',
+      en: 'A full stack developer based in Paris, passed Epitech and Openclassrooms. He studied algorithms, data science and web. He builds mapping applications, analytics dashboards and this learning platform to share his journey. Believing that we learn by doing and by teaching, he teaches with clarity and pedagogy.',
+      ar: 'مطوّر full stack مقيم في باريس، مرشح من Epitech و Openclassrooms. يدرس الخوارزميات، علوم البيانات والويب. يبني تطبيقات خرائط ولوحات تحليلات وهذه المنصة التعليمية لمشاركة مساره. مقتنع بأننا نتعلم بالممارسة والنقل، يدرس بالوضوح والوضوح.'
     };
     return s[this.lang()] ?? s.fr;
   }
